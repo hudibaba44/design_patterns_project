@@ -31,12 +31,12 @@ void Character::setPower(int value)
     power = value;
 }
 
-int Character::getTime() const
+double Character::getTime() const
 {
     return time;
 }
 
-void Character::setTime(int value)
+void Character::setTime(double value)
 {
     time = value;
 }

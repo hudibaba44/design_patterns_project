@@ -9,7 +9,7 @@ TimeComponent::TimeComponent()
 void TimeComponent::update(Character *character)
 {
     character->setTime(character->getTime()+1);
-    emit valueChanged(character->getTime());
+//    emit valueChanged(character->getTime());
     qDebug() << character->getTime();
 }
 

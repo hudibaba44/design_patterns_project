@@ -1,12 +1,9 @@
 #include "Player.h"
 #include "QDebug"
-Player::Player()
-{
-
+Player::Player() : timeComponent(new TimeComponent()){
 }
 
 void Player::update()
 {
-    qDebug() <<"HELLO WORLD\n";
-
+    timeComponent->update(this);
 }

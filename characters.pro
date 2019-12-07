@@ -21,6 +21,7 @@ SOURCES += \
     HealthView.cpp \
     Player.cpp \
     TimeComponent.cpp \
+    TimeView.cpp \
     main.cpp
 
 HEADERS += \
@@ -28,7 +29,8 @@ HEADERS += \
     Game.h \
     HealthView.h \
     Player.h \
-    TimeComponent.h
+    TimeComponent.h \
+    TimeView.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

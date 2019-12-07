@@ -9,7 +9,7 @@ class Character
     int health;
     int power;
     int speed;
-    int time;
+    double time;
     std::vector<std::vector<Character *>> moves;
 
 public:
@@ -22,8 +22,8 @@ public:
     int getPower() const;
     void setPower(int value);
     virtual void update() = 0;
-    int getTime() const;
-    void setTime(int value);
+    double getTime() const;
+    void setTime(double value);
 
     std::vector<std::vector<Character *> > getMoves() const;
     void setMoves(const std::vector<std::vector<Character *> > &value);
