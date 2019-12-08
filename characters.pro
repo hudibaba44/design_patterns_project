@@ -19,7 +19,9 @@ SOURCES += \
     Character.cpp \
     Game.cpp \
     HealthView.cpp \
+    MoveView.cpp \
     Player.cpp \
+    ProgressBarView.cpp \
     TimeComponent.cpp \
     TimeView.cpp \
     main.cpp
@@ -28,7 +30,9 @@ HEADERS += \
     Character.h \
     Game.h \
     HealthView.h \
+    MoveView.h \
     Player.h \
+    ProgressBarView.h \
     TimeComponent.h \
     TimeView.h
 

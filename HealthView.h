@@ -3,16 +3,18 @@
 
 #include <QGraphicsTextItem>
 
-class HealthView: public QGraphicsTextItem{
+#include <QProgressBar>
+#include "Character.h"
+#include "ProgressBarView.h"
+class HealthView
+{
 public:
-    HealthView(QGraphicsItem * parent=nullptr);
-    int getHealth() const;
-    void setHealth(int value);
-
+    HealthView(Character *);
+    QProgressBar *getProgressBar();
+    void render();
 private:
-    int health;
+    ProgressBarView *progressBarView;
 };
-
 
 
 #endif // HEALTHVIEW_H

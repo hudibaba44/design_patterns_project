@@ -51,6 +51,16 @@ void Character::setMoves(const std::vector<std::vector<Character *> > &value)
     moves = value;
 }
 
+std::string Character::getName() const
+{
+    return name;
+}
+
+void Character::setName(const std::string &value)
+{
+    name = value;
+}
+
 Character::~Character()
 {
 

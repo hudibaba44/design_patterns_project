@@ -11,7 +11,7 @@ public:
     void update(Character *);
 
 public slots:
-    void temp();
+    void temp1(std::vector<Character *> moves);
 
 signals:
     void valueChanged(int newValue);

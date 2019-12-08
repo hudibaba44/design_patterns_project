@@ -6,6 +6,7 @@
 
 class Character
 {
+    std::string name;
     int health;
     int power;
     int speed;
@@ -27,6 +28,8 @@ public:
 
     std::vector<std::vector<Character *> > getMoves() const;
     void setMoves(const std::vector<std::vector<Character *> > &value);
+    std::string getName() const;
+    void setName(const std::string &value);
 };
 
 #endif // CHARACTER_H

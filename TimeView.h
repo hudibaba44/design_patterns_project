@@ -3,6 +3,7 @@
 
 #include <QProgressBar>
 #include "Character.h"
+#include "ProgressBarView.h"
 class TimeView
 {
 public:
@@ -10,9 +11,7 @@ public:
     QProgressBar *getProgressBar();
     void render();
 private:
-    Character *character;
-    QProgressBar *qProgressBar;
-
+    ProgressBarView *progressBarView;
 };
 
 #endif // TIMEVIEW_H

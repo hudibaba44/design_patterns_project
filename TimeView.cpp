@@ -1,17 +1,17 @@
 #include "TimeView.h"
 
-TimeView::TimeView(Character *character_arg) : character(character_arg), qProgressBar(new QProgressBar()){
-    qProgressBar->setRange(0, 100);
+TimeView::TimeView(Character *character) : progressBarView(new ProgressBarView(character)){
 }
 
 QProgressBar *TimeView::getProgressBar()
 {
-    return qProgressBar;
+    return progressBarView->getProgressBar();
 }
-
 void TimeView::render()
 {
-    qProgressBar->setValue(static_cast<int>(character->getTime()));
+    progressBarView->getProgressBar()->
+            setValue(static_cast<int>(
+                         progressBarView->getCharacter()->getTime()));
 }
 
 

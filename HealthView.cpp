@@ -1,17 +1,17 @@
 #include "HealthView.h"
 
-HealthView::HealthView(QGraphicsItem * parent): QGraphicsTextItem(parent){
-
+HealthView::HealthView(Character *character) : progressBarView(new ProgressBarView(character)){
+    progressBarView->getProgressBar()->setRange(0, character->getHealth());
 }
 
-//int HealthView::getHealth() const
-//{
-//    return health;
-//}
-
-void HealthView::setHealth(int value)
+QProgressBar *HealthView::getProgressBar()
 {
-    health = value;
-//    health--;
-    setPlainText(QString("Health: ") + QString::number(health));
+    return progressBarView->getProgressBar();
 }
+void HealthView::render()
+{
+    progressBarView->getProgressBar()->
+            setValue(static_cast<int>(
+                         progressBarView->getCharacter()->getHealth()));
+}
+
