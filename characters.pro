@@ -19,24 +19,35 @@ SOURCES += \
     Character.cpp \
     Game.cpp \
     HealthView.cpp \
+    LayoutGenerator.cpp \
     MoveView.cpp \
     Player.cpp \
+    PlayerGenerator.cpp \
     ProgressBarView.cpp \
     TimeComponent.cpp \
     TimeView.cpp \
+    ViewGenerator.cpp \
+    imagecomponent.cpp \
     main.cpp
 
 HEADERS += \
     Character.h \
     Game.h \
     HealthView.h \
+    ImageComponent.h \
+    LayoutGenerator.h \
     MoveView.h \
     Player.h \
+    PlayerGenerator.h \
     ProgressBarView.h \
     TimeComponent.h \
-    TimeView.h
+    TimeView.h \
+    ViewGenerator.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    Resources.qrc

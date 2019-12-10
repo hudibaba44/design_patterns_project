@@ -7,7 +7,11 @@ int Character::getHealth() const
 
 void Character::setHealth(int value)
 {
+
     health = value;
+    if(maxHealth == 0){
+        maxHealth = health;
+    }
 }
 
 
@@ -66,8 +70,6 @@ Character::~Character()
 
 }
 
-Character::Character()
+Character::Character(): maxHealth(0), time(0)
 {
-    time = 0;
-    health = 100;
 }

@@ -13,7 +13,7 @@ class Game: public QGraphicsView
 {
 public:
     Game(QWidget * parent=nullptr);
-
+private:
     QGraphicsScene *scene;
     HealthView *healthView;
     TimeComponent *timeComponent;

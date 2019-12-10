@@ -7,6 +7,7 @@
 class Character
 {
     std::string name;
+    int maxHealth;
     int health;
     int power;
     int speed;
