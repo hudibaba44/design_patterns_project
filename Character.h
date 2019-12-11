@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-
+#include <QGraphicsPixmapItem>
 class Character
 {
     std::string name;
@@ -13,7 +13,7 @@ class Character
     int speed;
     double time;
     std::vector<std::vector<Character *>> moves;
-
+    std::string sprite;
 public:
     virtual ~Character();
     Character();
@@ -31,6 +31,8 @@ public:
     void setMoves(const std::vector<std::vector<Character *> > &value);
     std::string getName() const;
     void setName(const std::string &value);
+    std::string getSprite() const;
+    void setSprite(std::string path);
 };
 
 #endif // CHARACTER_H

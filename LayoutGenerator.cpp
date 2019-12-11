@@ -4,6 +4,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QObject>
+#include "Game.h"
 LayoutGenerator::LayoutGenerator()
 {
 
@@ -47,11 +48,14 @@ QWidget *LayoutGenerator::generateMoves(std::vector<std::vector<MoveView *> > mo
 {
 //    connect(cronoMovesView[0], SIGNAL(movePressed(std::vector<Character *>)), timeComponent,
 //            SLOT(temp1(std::vector<Character *>)));
+    Game *gameInstance = Game::create_instance();
     QWidget *window = new QWidget;
     QGridLayout *layout = new QGridLayout;
     for(unsigned long i=0;i<movesView.size();i++){
         for(unsigned long j=0;j<movesView[i].size(); j++){
             layout->addWidget(movesView[i][j]->getQRadioButton(), static_cast<int>(j), static_cast<int>(i));
+            QObject::connect(movesView[i][j], SIGNAL(movePressed(std::vector<Character *>)),
+                    gameInstance, SLOT(set_move_selected(std::vector<Character *>)));
             //connect
         }
     }

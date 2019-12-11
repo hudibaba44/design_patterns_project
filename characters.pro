@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     Character.cpp \
+    Enemy.cpp \
     Game.cpp \
     HealthView.cpp \
     LayoutGenerator.cpp \
@@ -24,6 +25,7 @@ SOURCES += \
     Player.cpp \
     PlayerGenerator.cpp \
     ProgressBarView.cpp \
+    SpriteView.cpp \
     TimeComponent.cpp \
     TimeView.cpp \
     ViewGenerator.cpp \
@@ -32,6 +34,7 @@ SOURCES += \
 
 HEADERS += \
     Character.h \
+    Enemy.h \
     Game.h \
     HealthView.h \
     ImageComponent.h \
@@ -40,6 +43,7 @@ HEADERS += \
     Player.h \
     PlayerGenerator.h \
     ProgressBarView.h \
+    SpriteView.h \
     TimeComponent.h \
     TimeView.h \
     ViewGenerator.h

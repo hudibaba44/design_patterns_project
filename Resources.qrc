@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/images">
         <file>Crono - Battle (Front).gif</file>
+        <file>Cyrus (Front).gif</file>
     </qresource>
 </RCC>

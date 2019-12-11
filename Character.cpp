@@ -65,9 +65,19 @@ void Character::setName(const std::string &value)
     name = value;
 }
 
+std::string Character::getSprite() const
+{
+    return sprite;
+}
+
+void Character::setSprite(std::string path)
+{
+    sprite = path;
+}
+
 Character::~Character()
 {
-
+    
 }
 
 Character::Character(): maxHealth(0), time(0)
