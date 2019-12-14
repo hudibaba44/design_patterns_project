@@ -21,10 +21,3 @@ void TimeComponent::update(Character *character)
     }
 }
 
-void TimeComponent::temp1(std::vector<Character *> moves){
-    qDebug() << "PRESSED\n";
-    for(auto i:moves){
-        qDebug() << QString::fromStdString(i->getName());
-    }
-}
-

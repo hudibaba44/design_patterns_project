@@ -55,7 +55,7 @@ QWidget *LayoutGenerator::generateMoves(std::vector<std::vector<MoveView *> > mo
         for(unsigned long j=0;j<movesView[i].size(); j++){
             layout->addWidget(movesView[i][j]->getQRadioButton(), static_cast<int>(j), static_cast<int>(i));
             QObject::connect(movesView[i][j], SIGNAL(movePressed(std::vector<Character *>)),
-                    gameInstance, SLOT(set_move_selected(std::vector<Character *>)));
+                    gameInstance, SLOT(setMoveSelected(std::vector<Character *>)));
             //connect
         }
     }

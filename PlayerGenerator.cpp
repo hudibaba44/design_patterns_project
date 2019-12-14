@@ -27,18 +27,21 @@ Character *PlayerGenerator::createPlayer(std::string name)
         character->setName("crono");
         character->setSpeed(15);
         character->setHealth(300);
+        character->setPower(13);
     }
     if(name == "marle"){
         character = new Player();
         character->setName("marle");
         character->setSpeed(10);
         character->setHealth(200);
+        character->setPower(12);
     }
     if(name == "lucca"){
         character = new Player();
         character->setName("lucca");
         character->setSpeed(5);
         character->setHealth(100);
+        character->setPower(11);
     }
     return character;
 }

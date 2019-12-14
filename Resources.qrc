@@ -2,5 +2,18 @@
     <qresource prefix="/images">
         <file>Crono - Battle (Front).gif</file>
         <file>Cyrus (Front).gif</file>
+        <file>Crono - Dead.gif</file>
+        <file>Crono - Hit (Front).gif</file>
+        <file>Crono - Kneel (Front).gif</file>
+        <file>Gato (Front).gif</file>
+        <file>Heckran (Front).gif</file>
+        <file>Lucca - Dead.gif</file>
+        <file>Lucca - Hit (Front).gif</file>
+        <file>Lucca - Kneel (Front).gif</file>
+        <file>Marle - Dead.gif</file>
+        <file>Marle - Hit (Front).gif</file>
+        <file>Marle - Kneel (Front).gif</file>
+        <file>Marle - Ready1 (Front).gif</file>
+        <file>Lucca - Mallet (Front).gif</file>
     </qresource>
 </RCC>
