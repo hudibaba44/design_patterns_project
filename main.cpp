@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    Game *game = Game::create_instance();
+    Game *game = Game::createInstance();
     game->init();
 //    game->loop();
     game->show();

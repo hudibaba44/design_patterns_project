@@ -48,7 +48,7 @@ QWidget *LayoutGenerator::generateMoves(std::vector<std::vector<MoveView *> > mo
 {
 //    connect(cronoMovesView[0], SIGNAL(movePressed(std::vector<Character *>)), timeComponent,
 //            SLOT(temp1(std::vector<Character *>)));
-    Game *gameInstance = Game::create_instance();
+    Game *gameInstance = Game::createInstance();
     QWidget *window = new QWidget;
     QGridLayout *layout = new QGridLayout;
     for(unsigned long i=0;i<movesView.size();i++){

@@ -38,7 +38,7 @@ void SpriteView::setAttackSignal()
     sprite->setPixmap(QPixmap(character->getSprite().c_str()));
     connect(attackButton, SIGNAL(clicked()),
                      this, SLOT(handleClick()));
-    Game *gameInstance = Game::create_instance();
+    Game *gameInstance = Game::createInstance();
     QObject::connect(this, SIGNAL(spriteClicked(Character *)),
                      gameInstance, SLOT(playerAttack(Character *)));
 

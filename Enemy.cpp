@@ -1,8 +1,8 @@
 #include "Enemy.h"
 Enemy::Enemy(AIComponent *aiComponent) :
     timeComponent(new TimeComponent()),
-    aiComponent(aiComponent){
-    game = Game::create_instance();
+    aiComponent(aiComponent),
+    game(Game::createInstance()){
 }
 
 void Enemy::update()

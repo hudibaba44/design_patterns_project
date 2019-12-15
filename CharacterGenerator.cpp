@@ -46,10 +46,10 @@ Character *CharacterGenerator::createPlayer(std::string name)
         character->setPower(12);
         character->setRegen(10);
         character->setSprites({
-                                ":/images/Lucca - Dead.gif",
-                                ":/images/Lucca - Kneel (Front).gif",
-                                ":/images/Lucca - Hit (Front).gif",
-                                ":/images/Lucca - Mallet (Front).gif"
+                                  ":/images/Marle - Dead.gif",
+                                  ":/images/Marle - Kneel (Front).gif",
+                                  ":/images/Marle - Hit (Front).gif",
+                                  ":/images/Marle - Ready1 (Front).gif"
                               });
         character->setPosition({300, 300});
     }
@@ -61,11 +61,12 @@ Character *CharacterGenerator::createPlayer(std::string name)
         character->setPower(11);
         character->setRegen(10);
         character->setSprites({
-                                ":/images/Marle - Dead.gif",
-                                ":/images/Marle - Kneel (Front).gif",
-                                ":/images/Marle - Hit (Front).gif",
-                                ":/images/Marle - Ready1 (Front).gif"
+                                  ":/images/Lucca - Dead.gif",
+                                  ":/images/Lucca - Kneel (Front).gif",
+                                  ":/images/Lucca - Hit (Front).gif",
+                                  ":/images/Lucca - Mallet (Front).gif"
                               });
+
     character->setPosition({400, 300});
     }
     return character;
@@ -94,7 +95,7 @@ Character *CharacterGenerator::createEnemy(std::string name, AIComponent *aiComp
     if(name == "Gato"){
         character = new Enemy(aiComponent);
         character->setName("Gato");
-        character->setSpeed(15);
+        character->setSpeed(60);
         character->setMaxHealth(300);
         character->setPower(13);
         character->setRegen(10);
@@ -107,7 +108,7 @@ Character *CharacterGenerator::createEnemy(std::string name, AIComponent *aiComp
         character->setName("Cyrus");
         character->setSpeed(15);
         character->setMaxHealth(300);
-        character->setPower(13);
+        character->setPower(60);
         character->setRegen(10);
         character->setSprites({
                                 ":/images/Cyrus (Front).gif"});

@@ -19,9 +19,9 @@ class Game: public QGraphicsView
     Q_OBJECT
 public:
     ~Game();
-    static Game* create_instance();
+    static Game* createInstance();
     void init();
-    void initAll();
+    void initBattleScene();
     std::vector<Character *> getPlayers() const;
     void enemyAttack(std::vector<Character *> enemy, Character *target);
     void battleStart(EnemyOverworld *enemy);
@@ -36,6 +36,12 @@ private:
     void makeAtack();
     static Game *instance;
     void generateWorldScene();
+    void generateDifficultyScene();
+    void generateWinAndLoseScene();
+    void generatePlayerOverworld();
+    void generateEnemiesOverworld();
+    void render();
+    void removeDeadPlayers();
     QGraphicsScene *battleScene;
     QGraphicsScene *worldScene;
     QGraphicsScene *winScene;

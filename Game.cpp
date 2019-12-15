@@ -35,7 +35,7 @@ Game::~Game()
 //    move_selected = nullptr;
 }
 
-Game *Game::create_instance()
+Game *Game::createInstance()
 {
     if(instance == nullptr){
         instance = new Game();
@@ -78,7 +78,8 @@ void Game::setDifficulty()
     QPushButton* pButton = qobject_cast<QPushButton*>(sender());
     difficulty = pButton->text().toStdString();
     qDebug() << difficulty.c_str();
-    initAll();
+    setScene(worldScene);
+    initBattleScene();
 }
 
 void Game::enemyAttack(std::vector<Character *> enemyMove, Character *target)
@@ -137,6 +138,7 @@ void Game::battleStart(EnemyOverworld *enemy)
     if(result){
         if(enemyIndex>=0){
             enemies.erase(enemies.begin() + enemyIndex);
+            buttonSpriteViews.erase(buttonSpriteViews.begin() + enemyIndex);
         }
         qDebug() << "ENEMY ERSULT IS "<<enemyIndex;
         qDebug() << "ENEMY ERSULT IS "<<enemies.size();
@@ -152,11 +154,11 @@ void Game::battleStart(EnemyOverworld *enemy)
         playerOverworld->setFocus();
         worldScene->addItem(playerOverworld);
         setScene(worldScene);
-        viewport()->update();
         battleScene->removeItem(enemyProxy);
         enemyProxy->setWidget(nullptr);
         delete enemyProxy;
         enemyProxy = nullptr;
+        viewport()->update();
         //        enemyProxy = nullptr;
 //        worldScene->removeItem(enemy);
     }
@@ -181,31 +183,12 @@ int Game::loop()
             lag-=10;
         }
         QTest::qWait(10);
-        for(auto j:timeViews){
-            j->render();
-        }
-        for(auto j:healthViews){
-            j->render();
-        }
-        for(auto i:spriteViews){
-            i->render();
-        }
-//        temp->AIAttack(enemy1, this);
+        render();
         if(activeEnemy->getHealth()<=0){
             return 1;
         }
-        std::vector<int> deadPlayers;
-        for(unsigned long int i =0;i<players.size(); i++){
-            if(players[i]->getHealth() == 0){
-                deadPlayers.push_back(i);
-            }
-        }
-        for(int i=deadPlayers.size()-1; i>=0;i--){
-            players.erase(players.begin()+deadPlayers[i]);
-        }
-
+        removeDeadPlayers();
         if(players.size() == 0){
-
             return 0;
         }
     }
@@ -214,12 +197,50 @@ int Game::loop()
 void Game::generateWorldScene()
 {
     worldScene = new QGraphicsScene();
+    generatePlayerOverworld();
+    generateEnemiesOverworld();
+}
+
+void Game::generateDifficultyScene()
+{
+    difficultyScene = new QGraphicsScene();
+    QPushButton *buttonEasy= new QPushButton("Easy");
+    buttonEasy->move(300, 300);
+    difficultyScene->addWidget(buttonEasy);
+
+    QPushButton *buttonMedium= new QPushButton("Medium");
+    buttonMedium->move(400, 300);
+    difficultyScene->addWidget(buttonMedium);
+    connect(buttonEasy, SIGNAL(clicked()), this, SLOT(setDifficulty()));
+    connect(buttonMedium, SIGNAL(clicked()), this, SLOT(setDifficulty()));
+}
+
+void Game::generateWinAndLoseScene()
+{
+    loseScene = new QGraphicsScene();
+    QGraphicsTextItem *textLose = new QGraphicsTextItem("You Lose");
+    textLose->setPos(400, 400);
+    loseScene->addItem(textLose);
+
+    winScene = new QGraphicsScene();
+    QGraphicsTextItem *textWin = new QGraphicsTextItem("You Win");
+    textWin->setPos(400, 400);
+    winScene->addItem(textWin);
+}
+
+void Game::generatePlayerOverworld()
+{
     playerOverworld = new PlayerOverworld();
     QPixmap pixmap(":/images/Crono - Battle (Front).gif");
     playerOverworld->setPixmap(pixmap);
     playerOverworld->setPos(400,400);
     playerOverworld->setFlag(QGraphicsItem::ItemIsFocusable);
     playerOverworld->setFocus();
+    worldScene->addItem(playerOverworld);
+}
+
+void Game::generateEnemiesOverworld()
+{
     EnemyOverworld *enemy1 = new EnemyOverworld("Gato");
     QPixmap pixmap1(":/images/Gato (Front).gif");
     enemy1->setPixmap(pixmap1);
@@ -235,50 +256,52 @@ void Game::generateWorldScene()
     enemy3->setPixmap(pixmap3);
     enemy3->setPos(800,400);
 
-    worldScene->addItem(playerOverworld);
     worldScene->addItem(enemy1);
     worldScene->addItem(enemy2);
     worldScene->addItem(enemy3);
-
     enemyOverworld.push_back(enemy1);
     enemyOverworld.push_back(enemy2);
     enemyOverworld.push_back(enemy3);
 }
 
-void Game::init(){
-    difficultyScene = new QGraphicsScene();
-    QPushButton *buttonEasy= new QPushButton("Easy");
-    buttonEasy->move(300, 300);
-    difficultyScene->addWidget(buttonEasy);
-
-    QPushButton *buttonMedium= new QPushButton("Medium");
-    buttonMedium->move(400, 300);
-    difficultyScene->addWidget(buttonMedium);
-    connect(buttonEasy, SIGNAL(clicked()), this, SLOT(setDifficulty()));
-    connect(buttonMedium, SIGNAL(clicked()), this, SLOT(setDifficulty()));
-    setScene(difficultyScene);
-}
-void Game::initAll()
+void Game::render()
 {
-    loseScene = new QGraphicsScene();
-    QGraphicsTextItem *textLose = new QGraphicsTextItem("You Lose");
-    textLose->setPos(400, 400);
-    loseScene->addItem(textLose);
+    for(auto j:timeViews){
+        j->render();
+    }
+    for(auto j:healthViews){
+        j->render();
+    }
+    for(auto i:spriteViews){
+        i->render();
+    }
+}
 
-    winScene = new QGraphicsScene();
-    QGraphicsTextItem *textWin = new QGraphicsTextItem("You Win");
-    textWin->setPos(400, 400);
-    winScene->addItem(textWin);
+void Game::removeDeadPlayers()
+{
+    std::vector<int> deadPlayers;
+    for(unsigned long int i =0;i<players.size(); i++){
+        if(players[i]->getHealth() == 0){
+            deadPlayers.push_back(i);
+        }
+    }
+    for(int i=deadPlayers.size()-1; i>=0;i--){
+        players.erase(players.begin()+deadPlayers[i]);
+    }
+}
 
-    battleScene = new QGraphicsScene();
-//    battleScene->setSceneRect(0,0,800,600); // make the scene 800x600 instead of infinity by infinity (default)
-    generateWorldScene();
-    // make the newly created scene the scene to visualize (since Game is a QGraphicsView Widget,
-    // it can be used to visualize scenes)
-    setScene(worldScene);
+void Game::init(){
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFixedSize(1024,768);
+    generateDifficultyScene();
+    generateWinAndLoseScene();
+    generateWorldScene();
+    setScene(difficultyScene);
+}
+void Game::initBattleScene()
+{
+    battleScene = new QGraphicsScene();
     CharacterGenerator playerGenerator;
     ViewGenerator viewGenerator;
     players = playerGenerator.createPlayers({"crono", "marle", "lucca"});
@@ -286,34 +309,21 @@ void Game::initAll()
     healthViews = viewGenerator.createHealthViews(players);
     LayoutGenerator layoutGenerator;
     battleScene->addWidget(layoutGenerator.generateTimeAndHealth(players, timeViews, healthViews));
-    show();
     std::vector<std::vector<MoveView *>> movesView = viewGenerator.createMoveViews(players);
     battleScene->addWidget(layoutGenerator.generateMoves(movesView));
     AIStrategyFactory *aiStrategyFactory = new AIStrategyFactory;
-//    std::cout<<"Enter difficlty, easy/medium\n";
-//    std::string difficulty;
-//    std::cin>>difficulty;
     AIStrategy *aiStrategy = aiStrategyFactory->getAI(difficulty);
     AIComponent *aiComponent = new AIComponent(aiStrategy);
     enemies = playerGenerator.createEnemies({"Gato", "Cyrus", "Heckran"}, aiComponent);
-//    show();
     spriteViews = viewGenerator.createSpriteViews(players);
     for(auto i:spriteViews){
         battleScene->addItem(i->getViewSprite());
-        i->getViewSprite()->setPos(300, 300);
+//        i->getViewSprite()->setPos(300, 300);
     }
     buttonSpriteViews = viewGenerator.createSpriteViews(enemies);
     for(auto i:buttonSpriteViews){
         i->setAttackSignal();
     }
-//    enemyProxy = battleScene->addWidget(buttonSpriteViews[0]->getAttackSprite());
-//    qDebug() << enemyProxy;
-//    spriteView->
-//    spriteView->getSprite()->setPos(300,300);
-//    QTest::qWait(2000);
-//    battleScene->removeItem(enemyProxy);
-
-
 }
 
 Game::Game(QWidget * parent)

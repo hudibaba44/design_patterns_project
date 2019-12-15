@@ -35,7 +35,7 @@ void PlayerOverworld::keyPressEvent(QKeyEvent *event){
 //        QGraphicsItem *item = colliding_items[i];
 //        qDebug() <<typeid(item);
         if (typeid(*(colliding_items[i])) == typeid(EnemyOverworld)){
-            Game *game = Game::create_instance();
+            Game *game = Game::createInstance();
             qDebug() << "COLLIDE";
             game->battleStart(static_cast<EnemyOverworld*>(colliding_items[i]));
 //           delete colliding_items[i];
