@@ -6,7 +6,6 @@
 #include <QGraphicsPixmapItem>
 #include "Game.h"
 #include "AIComponent.h"
-
 class Enemy : public Character
 {
 public:

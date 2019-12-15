@@ -6,6 +6,7 @@
 #include "TimeView.h"
 #include "HealthView.h"
 #include "MoveView.h"
+#include "SpriteView.h"
 class ViewGenerator
 {
 public:
@@ -13,7 +14,7 @@ public:
     std::vector<TimeView *> createTimeViews(std::vector<Character *>);
     std::vector<HealthView *> createHealthViews(std::vector<Character *>);
     std::vector<std::vector<MoveView *>> createMoveViews(std::vector<Character *>);
-
+    std::vector<SpriteView*> createSpriteViews(std::vector<Character *>);
 };
 
 #endif // VIEWGENERATOR_H

@@ -6,40 +6,47 @@
 #include <QGraphicsWidget>
 #include <QLabel>
 #include <QIcon>
-SpriteView::SpriteView(Character *character): sprite(new QGraphicsPixmapItem()), character(character), l(new QPushButton())
+SpriteView::SpriteView(Character *character):
+    sprite(new QGraphicsPixmapItem()),
+    character(character),
+    attackButton(new QPushButton())
 {
     QPixmap pixmap(character->getSprite().c_str());
-    QIcon ButtonIcon(pixmap);
-    l->setIcon(ButtonIcon);
-    l->setIconSize(pixmap.rect().size());
-
     sprite->setPixmap(QPixmap(character->getSprite().c_str()));
-//    spriteWidget = new SpriteWidget();
-//    spriteWidget->setGraphicsItem(sprite);
-    connect(l, SIGNAL(clicked()),
-                     this, SLOT(handleClick()));
-    //    connect(this, SIGNAL(mousePressEvent(QMouseEvent *)), this, SLOT(handleClick()));
 }
 
-QPushButton *SpriteView::getSprite()
+QPushButton *SpriteView::getAttackSprite()
 {
-    return l;
+    return attackButton;
 }
+
+QGraphicsPixmapItem *SpriteView::getViewSprite()
+{
+    return sprite;
+}
+
 
 void SpriteView::setAttackSignal()
 {
 
-    //    QPushButton *attackButton = new QPushButton("Attack!", this);
+    QPixmap pixmap(character->getSprite().c_str());
+    QIcon ButtonIcon(pixmap);
+    attackButton->setIcon(ButtonIcon);
+    attackButton->setIconSize(pixmap.rect().size());
+    attackButton->move(600,50);
+    sprite->setPixmap(QPixmap(character->getSprite().c_str()));
+    connect(attackButton, SIGNAL(clicked()),
+                     this, SLOT(handleClick()));
     Game *gameInstance = Game::create_instance();
     QObject::connect(this, SIGNAL(spriteClicked(Character *)),
                      gameInstance, SLOT(playerAttack(Character *)));
-//    QObject::connect(l, SIGNAL(clicked()),
-//                     gameInstance, SLOT(playerAttack(Character *)));
 
 }
 
 void SpriteView::render()
 {
+    std::pair<int,int> position = character->getPosition();
+    sprite->setPos(position.first, position.second);
     sprite->setPixmap(QPixmap(character->getSprite().c_str()));
 }
 

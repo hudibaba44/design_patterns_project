@@ -11,7 +11,8 @@ class SpriteView: public QObject
     Q_OBJECT
 public:
     SpriteView(Character *);
-    QPushButton *getSprite();
+    QPushButton *getAttackSprite();
+    QGraphicsPixmapItem *getViewSprite();
     void setAttackSignal();
     void render();
 
@@ -26,7 +27,7 @@ public slots:
 private:
     QGraphicsPixmapItem *sprite;
     Character *character;
-    QPushButton *l;
+    QPushButton *attackButton;
 };
 
 #endif // SPRITEVIEW_H

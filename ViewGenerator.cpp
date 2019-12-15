@@ -37,3 +37,12 @@ std::vector<std::vector<MoveView *>> ViewGenerator::createMoveViews(std::vector<
     }
     return allMovesView;
 }
+
+std::vector<SpriteView *> ViewGenerator::createSpriteViews(std::vector<Character *> characters)
+{
+    std::vector<SpriteView*> vec;
+    for(auto i:characters){
+        vec.push_back(new SpriteView(i));
+    }
+    return vec;
+}

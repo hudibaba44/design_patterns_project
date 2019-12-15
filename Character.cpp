@@ -1,17 +1,13 @@
 #include "Character.h"
 
-int Character::getHealth() const
+double Character::getHealth() const
 {
     return health;
 }
 
-void Character::setHealth(int value)
+void Character::setHealth(double value)
 {
-
     health = value;
-    if(maxHealth == 0){
-        maxHealth = health;
-    }
 }
 
 
@@ -75,11 +71,55 @@ void Character::setSprite(std::string path)
     sprite = path;
 }
 
+int Character::getRegen() const
+{
+    return regen;
+}
+
+void Character::setRegen(int value)
+{
+    regen = value;
+}
+
+int Character::getMaxHealth() const
+{
+    return maxHealth;
+}
+
+void Character::setMaxHealth(int value)
+{
+    maxHealth = value;
+    if(health == 0){
+        health = maxHealth;
+    }
+}
+
+void Character::setSprites(const std::vector<std::string> &value)
+{
+    sprites = value;
+    sprite = sprites[sprites.size()-1];
+}
+
+std::pair<int, int> Character::getPosition() const
+{
+    return position;
+}
+
+void Character::setPosition(const std::pair<int, int> &value)
+{
+    position = value;
+}
+
+std::vector<std::string> Character::getSprites() const
+{
+    return sprites;
+}
+
 Character::~Character()
 {
     
 }
 
-Character::Character(): maxHealth(0), time(0)
+Character::Character(): health(0), time(0)
 {
 }

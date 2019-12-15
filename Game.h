@@ -11,6 +11,7 @@
 #include <QObject>
 #include <queue>
 #include <TimeView.h>
+#include "SpriteView.h"
 
 class Game: public QGraphicsView
 {
@@ -45,6 +46,7 @@ private:
     std::queue<AttackInfo> attackQueue;
     std::vector<TimeView *> timeViews;
     std::vector<HealthView *> healthViews;
+    std::vector<SpriteView *> spriteViews;
     Character *enemy1;
 };
 

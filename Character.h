@@ -8,17 +8,20 @@ class Character
 {
     std::string name;
     int maxHealth;
-    int health;
+    double health;
     int power;
     int speed;
+    int regen;
     double time;
+    std::pair<int,int> position;
     std::vector<std::vector<Character *>> moves;
+    std::vector<std::string> sprites;
     std::string sprite;
 public:
     virtual ~Character();
     Character();
-    int getHealth() const;
-    void setHealth(int value);
+    double getHealth() const;
+    void setHealth(double value);
     int getSpeed() const;
     void setSpeed(int value);
     int getPower() const;
@@ -33,6 +36,14 @@ public:
     void setName(const std::string &value);
     std::string getSprite() const;
     void setSprite(std::string path);
+    int getRegen() const;
+    void setRegen(int value);
+    int getMaxHealth() const;
+    void setMaxHealth(int value);
+    void setSprites(const std::vector<std::string> &value);
+    std::pair<int, int> getPosition() const;
+    void setPosition(const std::pair<int, int> &value);
+    std::vector<std::string> getSprites() const;
 };
 
 #endif // CHARACTER_H

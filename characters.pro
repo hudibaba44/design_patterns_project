@@ -23,7 +23,9 @@ SOURCES += \
     Character.cpp \
     Enemy.cpp \
     Game.cpp \
+    HealthComponent.cpp \
     HealthView.cpp \
+    ImageComponent.cpp \
     LayoutGenerator.cpp \
     MoveView.cpp \
     Player.cpp \
@@ -33,7 +35,6 @@ SOURCES += \
     TimeComponent.cpp \
     TimeView.cpp \
     ViewGenerator.cpp \
-    imagecomponent.cpp \
     main.cpp
 
 HEADERS += \
@@ -44,6 +45,7 @@ HEADERS += \
     Character.h \
     Enemy.h \
     Game.h \
+    HealthComponent.h \
     HealthView.h \
     ImageComponent.h \
     LayoutGenerator.h \

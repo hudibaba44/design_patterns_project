@@ -24,12 +24,6 @@
 #include "AIStrategyFactory.h"
 #include "AIStrategyImpl.h"
 Game *Game::instance = nullptr;
-void temp1(std::vector<Character *> moves){
-    qDebug() << "PRESSED\n";
-    for(auto i:moves){
-        qDebug() << QString::fromStdString(i->getName());
-    }
-}
 
 Game::~Game()
 {
@@ -46,7 +40,7 @@ Game *Game::create_instance()
 
 void Game::setMoveSelected(std::vector<Character *> emitted_move)
 {
-    qDebug() << "MOVE SELECTED\n";
+//    qDebug() << "MOVE SELECTED\n";
     moveSelected = emitted_move;
 }
 
@@ -114,6 +108,28 @@ void Game::loop()
         enemy1->update();
 
         makeAtack();
+        std::vector<int> deadPlayers;
+        for(unsigned long int i =0;i<players.size(); i++){
+            if(players[i]->getHealth() == 0){
+                deadPlayers.push_back(i);
+            }
+        }
+        for(int i=deadPlayers.size()-1; i>=0;i--){
+            players.erase(players.begin()+deadPlayers[i]);
+        }
+        for(auto i:spriteViews){
+            i->render();
+        }
+        if(players.size() == 0){
+
+            scene = new QGraphicsScene();
+            scene->setSceneRect(0,0,800,600); // make the scene 800x600 instead of infinity by infinity (default)
+
+            // make the newly created scene the scene to visualize (since Game is a QGraphicsView Widget,
+            // it can be used to visualize scenes)
+            setScene(scene);
+            scene->setActiveWindow(0);
+        }
 //            crono->update();
 //            marle->update();
 //            lucca->update();
@@ -155,22 +171,28 @@ void Game::init()
 //    show();
     QGraphicsPixmapItem *testItem = new QGraphicsPixmapItem();
     testItem->setPixmap(QPixmap(":/images/Crono - Battle (Front).gif"));
-    testItem->setPos(200, 200);
+    testItem->setPos(200, 300);
     scene->addItem(testItem);
     AIStrategyFactory *aiStrategyFactory = new AIStrategyFactory;
     AIStrategy *aiStrategy = aiStrategyFactory->getAI(AIStrategyFactory::medium);
     AIComponent *aiComponent = new AIComponent(aiStrategy);
     enemy1 = new Enemy(aiComponent);
     enemy1->setSprite(":/images/Cyrus (Front).gif");
-    enemy1->setHealth(1000);
+    enemy1->setMaxHealth(1000);
     enemy1->setName("cyrus");
     enemy1->setSpeed(15);
-    enemy1->setPower(13);
+    enemy1->setPower(130);
+    enemy1->setRegen(10);
     enemy1->setMoves({{enemy1}});
+    spriteViews = viewGenerator.createSpriteViews(players);
+    for(auto i:spriteViews){
+        scene->addItem(i->getViewSprite());
+        i->getViewSprite()->setPos(300, 300);
+    }
     SpriteView *spriteView = new SpriteView(enemy1);
 //    spriteView->setFlag(QGraphicsItem::ItemIsFocusable);
 //    spriteView->getSprite()->setFocus();
-    scene->addWidget(spriteView->getSprite());
+    scene->addWidget(spriteView->getAttackSprite());
 //    spriteView->
 //    spriteView->getSprite()->setPos(300,300);
     spriteView->setAttackSignal();
