@@ -165,21 +165,32 @@ void Game::battleStart(EnemyOverworld *enemy)
 
 int Game::loop()
 {
+    unsigned long long int previous = QDateTime::currentMSecsSinceEpoch();
+    unsigned long long int lag = 0;
     while(1){
-        QTest::qWait(10);
-        for(auto j:players){
-            j->update();
+        unsigned long long int current = QDateTime::currentMSecsSinceEpoch();
+        unsigned long long int elapsed = current-previous;
+        previous = current;
+        lag+=elapsed;
+        while(lag >= 10){
+            for(auto j:players){
+                j->update();
+            }
+            activeEnemy->update();
+            makeAtack();
+            lag-=10;
         }
+        QTest::qWait(10);
         for(auto j:timeViews){
             j->render();
         }
         for(auto j:healthViews){
             j->render();
         }
+        for(auto i:spriteViews){
+            i->render();
+        }
 //        temp->AIAttack(enemy1, this);
-        activeEnemy->update();
-
-        makeAtack();
         if(activeEnemy->getHealth()<=0){
             return 1;
         }
@@ -192,26 +203,11 @@ int Game::loop()
         for(int i=deadPlayers.size()-1; i>=0;i--){
             players.erase(players.begin()+deadPlayers[i]);
         }
-        for(auto i:spriteViews){
-            i->render();
-        }
+
         if(players.size() == 0){
 
             return 0;
         }
-//            crono->update();
-//            marle->update();
-//            lucca->update();
-//            timeViewCrono->render();
-//            timeViewLucca->render();
-//            timeViewMarle->render();
-//            healthViewCrono->render();
-//            healthViewLucca->render();
-//            healthViewMarle->render();
-//            crono->setHealth(crono->getHealth()-5);
-//            lucca->setHealth(lucca->getHealth()-5);
-//            marle->setHealth(marle->getHealth()-5);
-
     }
 }
 
