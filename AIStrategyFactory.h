@@ -2,7 +2,7 @@
 #define AISTRATEGYFACTORY_H
 
 #include "AIStrategy.h"
-
+#include <string>
 class AIStrategyFactory
 {
 public:
@@ -12,6 +12,7 @@ public:
         medium
     };
     AIStrategy *getAI(difficulty);
+    AIStrategy *getAI(std::string difficulty);
 };
 
 #endif // AISTRATEGYFACTORY_H

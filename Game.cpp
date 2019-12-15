@@ -15,7 +15,7 @@
 #include <QTest>
 #include <QLabel>
 #include "MoveView.h"
-#include "PlayerGenerator.h"
+#include "CharacterGenerator.h"
 #include "ViewGenerator.h"
 #include "LayoutGenerator.h"
 #include "Enemy.h"
@@ -23,6 +23,11 @@
 #include "AIStrategy.h"
 #include "AIStrategyFactory.h"
 #include "AIStrategyImpl.h"
+#include "PlayerOverworld.h"
+#include "EnemyOverworld.h"
+#include <QGraphicsProxyWidget>
+#include <iostream>
+
 Game *Game::instance = nullptr;
 
 Game::~Game()
@@ -68,6 +73,14 @@ void Game::playerAttack(Character *enemy)
     //    move_selected = emitted_move;
 }
 
+void Game::setDifficulty()
+{
+    QPushButton* pButton = qobject_cast<QPushButton*>(sender());
+    difficulty = pButton->text().toStdString();
+    qDebug() << difficulty.c_str();
+    initAll();
+}
+
 void Game::enemyAttack(std::vector<Character *> enemyMove, Character *target)
 {
     if(target == nullptr || enemyMove.size() == 0){
@@ -90,9 +103,68 @@ void Game::enemyAttack(std::vector<Character *> enemyMove, Character *target)
     }
 }
 
-void Game::loop()
+void Game::battleStart(EnemyOverworld *enemy)
 {
-    AIStrategy *temp = new easyAI();
+    worldScene->removeItem(enemy);
+    playerOverworld->clearFocus();
+    worldScene->removeItem(playerOverworld);
+    delete playerOverworld;
+    qDebug() << enemy->getName().c_str();
+    if(enemyProxy){
+        battleScene->removeItem(enemyProxy);
+        enemyProxy->setWidget(nullptr);
+        delete enemyProxy;
+        enemyProxy = nullptr;
+    }
+
+    SpriteView *enemyView = nullptr;
+    int enemyIndex = -1;
+    for(unsigned long int i=0;i<enemies.size(); i++){
+        if(enemy->getName() == enemies[i]->getName()){
+            activeEnemy = enemies[i];
+            enemyView = buttonSpriteViews[i];
+            enemyIndex = i;
+            break;
+        }
+    }
+    qDebug() << "ENEMY view is "<< enemyView;
+    enemyProxy = battleScene->addWidget(enemyView->getAttackSprite());
+    setScene(battleScene);
+    int result = loop();
+    if(!result){
+        setScene(loseScene);
+    }
+    if(result){
+        if(enemyIndex>=0){
+            enemies.erase(enemies.begin() + enemyIndex);
+        }
+        qDebug() << "ENEMY ERSULT IS "<<enemyIndex;
+        qDebug() << "ENEMY ERSULT IS "<<enemies.size();
+        if(enemies.size() == 0){
+            setScene(winScene);
+            return;
+        }
+        playerOverworld = new PlayerOverworld();
+        QPixmap pixmap(":/images/Crono - Battle (Front).gif");
+        playerOverworld->setPixmap(pixmap);
+        playerOverworld->setPos(400, 400);
+        playerOverworld->setFlag(QGraphicsItem::ItemIsFocusable);
+        playerOverworld->setFocus();
+        worldScene->addItem(playerOverworld);
+        setScene(worldScene);
+        viewport()->update();
+        battleScene->removeItem(enemyProxy);
+        enemyProxy->setWidget(nullptr);
+        delete enemyProxy;
+        enemyProxy = nullptr;
+        //        enemyProxy = nullptr;
+//        worldScene->removeItem(enemy);
+    }
+    viewport()->update();
+}
+
+int Game::loop()
+{
     while(1){
         QTest::qWait(10);
         for(auto j:players){
@@ -105,9 +177,12 @@ void Game::loop()
             j->render();
         }
 //        temp->AIAttack(enemy1, this);
-        enemy1->update();
+        activeEnemy->update();
 
         makeAtack();
+        if(activeEnemy->getHealth()<=0){
+            return 1;
+        }
         std::vector<int> deadPlayers;
         for(unsigned long int i =0;i<players.size(); i++){
             if(players[i]->getHealth() == 0){
@@ -122,13 +197,7 @@ void Game::loop()
         }
         if(players.size() == 0){
 
-            scene = new QGraphicsScene();
-            scene->setSceneRect(0,0,800,600); // make the scene 800x600 instead of infinity by infinity (default)
-
-            // make the newly created scene the scene to visualize (since Game is a QGraphicsView Widget,
-            // it can be used to visualize scenes)
-            setScene(scene);
-            scene->setActiveWindow(0);
+            return 0;
         }
 //            crono->update();
 //            marle->update();
@@ -146,62 +215,114 @@ void Game::loop()
     }
 }
 
-void Game::init()
+void Game::generateWorldScene()
 {
-    scene = new QGraphicsScene();
-    scene->setSceneRect(0,0,800,600); // make the scene 800x600 instead of infinity by infinity (default)
+    worldScene = new QGraphicsScene();
+    playerOverworld = new PlayerOverworld();
+    QPixmap pixmap(":/images/Crono - Battle (Front).gif");
+    playerOverworld->setPixmap(pixmap);
+    playerOverworld->setPos(400,400);
+    playerOverworld->setFlag(QGraphicsItem::ItemIsFocusable);
+    playerOverworld->setFocus();
+    EnemyOverworld *enemy1 = new EnemyOverworld("Gato");
+    QPixmap pixmap1(":/images/Gato (Front).gif");
+    enemy1->setPixmap(pixmap1);
+    enemy1->setPos(0,400);
 
+    EnemyOverworld *enemy2 = new EnemyOverworld("Cyrus");
+    QPixmap pixmap2(":/images/Cyrus (Front).gif");
+    enemy2->setPixmap(pixmap2);
+    enemy2->setPos(400,0);
+
+    EnemyOverworld *enemy3 = new EnemyOverworld("Heckran");
+    QPixmap pixmap3(":/images/Heckran (Front).gif");
+    enemy3->setPixmap(pixmap3);
+    enemy3->setPos(800,400);
+
+    worldScene->addItem(playerOverworld);
+    worldScene->addItem(enemy1);
+    worldScene->addItem(enemy2);
+    worldScene->addItem(enemy3);
+
+    enemyOverworld.push_back(enemy1);
+    enemyOverworld.push_back(enemy2);
+    enemyOverworld.push_back(enemy3);
+}
+
+void Game::init(){
+    difficultyScene = new QGraphicsScene();
+    QPushButton *buttonEasy= new QPushButton("Easy");
+    buttonEasy->move(300, 300);
+    difficultyScene->addWidget(buttonEasy);
+
+    QPushButton *buttonMedium= new QPushButton("Medium");
+    buttonMedium->move(400, 300);
+    difficultyScene->addWidget(buttonMedium);
+    connect(buttonEasy, SIGNAL(clicked()), this, SLOT(setDifficulty()));
+    connect(buttonMedium, SIGNAL(clicked()), this, SLOT(setDifficulty()));
+    setScene(difficultyScene);
+}
+void Game::initAll()
+{
+    loseScene = new QGraphicsScene();
+    QGraphicsTextItem *textLose = new QGraphicsTextItem("You Lose");
+    textLose->setPos(400, 400);
+    loseScene->addItem(textLose);
+
+    winScene = new QGraphicsScene();
+    QGraphicsTextItem *textWin = new QGraphicsTextItem("You Win");
+    textWin->setPos(400, 400);
+    winScene->addItem(textWin);
+
+    battleScene = new QGraphicsScene();
+//    battleScene->setSceneRect(0,0,800,600); // make the scene 800x600 instead of infinity by infinity (default)
+    generateWorldScene();
     // make the newly created scene the scene to visualize (since Game is a QGraphicsView Widget,
     // it can be used to visualize scenes)
-    setScene(scene);
+    setScene(worldScene);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFixedSize(1024,768);
-    PlayerGenerator playerGenerator;
+    CharacterGenerator playerGenerator;
     ViewGenerator viewGenerator;
     players = playerGenerator.createPlayers({"crono", "marle", "lucca"});
     timeViews = viewGenerator.createTimeViews(players);
     healthViews = viewGenerator.createHealthViews(players);
     LayoutGenerator layoutGenerator;
-    scene->addWidget(layoutGenerator.generateTimeAndHealth(players, timeViews, healthViews));
+    battleScene->addWidget(layoutGenerator.generateTimeAndHealth(players, timeViews, healthViews));
     show();
     std::vector<std::vector<MoveView *>> movesView = viewGenerator.createMoveViews(players);
-
-    scene->addWidget(layoutGenerator.generateMoves(movesView));
-//    show();
-    QGraphicsPixmapItem *testItem = new QGraphicsPixmapItem();
-    testItem->setPixmap(QPixmap(":/images/Crono - Battle (Front).gif"));
-    testItem->setPos(200, 300);
-    scene->addItem(testItem);
+    battleScene->addWidget(layoutGenerator.generateMoves(movesView));
     AIStrategyFactory *aiStrategyFactory = new AIStrategyFactory;
-    AIStrategy *aiStrategy = aiStrategyFactory->getAI(AIStrategyFactory::medium);
+//    std::cout<<"Enter difficlty, easy/medium\n";
+//    std::string difficulty;
+//    std::cin>>difficulty;
+    AIStrategy *aiStrategy = aiStrategyFactory->getAI(difficulty);
     AIComponent *aiComponent = new AIComponent(aiStrategy);
-    enemy1 = new Enemy(aiComponent);
-    enemy1->setSprite(":/images/Cyrus (Front).gif");
-    enemy1->setMaxHealth(1000);
-    enemy1->setName("cyrus");
-    enemy1->setSpeed(15);
-    enemy1->setPower(130);
-    enemy1->setRegen(10);
-    enemy1->setMoves({{enemy1}});
+    enemies = playerGenerator.createEnemies({"Gato", "Cyrus", "Heckran"}, aiComponent);
+//    show();
     spriteViews = viewGenerator.createSpriteViews(players);
     for(auto i:spriteViews){
-        scene->addItem(i->getViewSprite());
+        battleScene->addItem(i->getViewSprite());
         i->getViewSprite()->setPos(300, 300);
     }
-    SpriteView *spriteView = new SpriteView(enemy1);
-//    spriteView->setFlag(QGraphicsItem::ItemIsFocusable);
-//    spriteView->getSprite()->setFocus();
-    scene->addWidget(spriteView->getAttackSprite());
+    buttonSpriteViews = viewGenerator.createSpriteViews(enemies);
+    for(auto i:buttonSpriteViews){
+        i->setAttackSignal();
+    }
+//    enemyProxy = battleScene->addWidget(buttonSpriteViews[0]->getAttackSprite());
+//    qDebug() << enemyProxy;
 //    spriteView->
 //    spriteView->getSprite()->setPos(300,300);
-    spriteView->setAttackSignal();
+//    QTest::qWait(2000);
+//    battleScene->removeItem(enemyProxy);
+
 
 }
 
 Game::Game(QWidget * parent)
 {
-
+    enemyProxy = nullptr;
 }
 
 void Game::makeAtack()
@@ -226,6 +347,8 @@ void Game::makeAtack()
     }
 
 }
+
+
 
 std::vector<Character *> Game::getPlayers() const
 {

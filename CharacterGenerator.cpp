@@ -1,11 +1,12 @@
-#include "PlayerGenerator.h"
-
-PlayerGenerator::PlayerGenerator()
+#include "CharacterGenerator.h"
+#include "Player.h"
+#include "Enemy.h"
+CharacterGenerator::CharacterGenerator()
 {
 
 }
 
-std::vector<Character *> PlayerGenerator::createPlayers(std::vector<std::string> names)
+std::vector<Character *> CharacterGenerator::createPlayers(std::vector<std::string> names)
 {
     assert(names.size() == 3);
     std::vector<Character *> players;
@@ -19,7 +20,7 @@ std::vector<Character *> PlayerGenerator::createPlayers(std::vector<std::string>
     return players;
 }
 
-Character *PlayerGenerator::createPlayer(std::string name)
+Character *CharacterGenerator::createPlayer(std::string name)
 {
     Character *character = nullptr;
     if(name == "crono"){
@@ -27,7 +28,7 @@ Character *PlayerGenerator::createPlayer(std::string name)
         character->setName("crono");
         character->setSpeed(15);
         character->setMaxHealth(300);
-        character->setPower(13);
+        character->setPower(130);
         character->setRegen(10);
         character->setSprites({
                                 ":/images/Crono - Dead.gif",
@@ -37,7 +38,7 @@ Character *PlayerGenerator::createPlayer(std::string name)
                               });
         character->setPosition({200, 300});
     }
-    if(name == "marle"){
+    else if(name == "marle"){
         character = new Player();
         character->setName("marle");
         character->setSpeed(10);
@@ -52,7 +53,7 @@ Character *PlayerGenerator::createPlayer(std::string name)
                               });
         character->setPosition({300, 300});
     }
-    if(name == "lucca"){
+    else if(name == "lucca"){
         character = new Player();
         character->setName("lucca");
         character->setSpeed(5);
@@ -69,3 +70,62 @@ Character *PlayerGenerator::createPlayer(std::string name)
     }
     return character;
 }
+
+
+std::vector<Character *> CharacterGenerator::createEnemies(
+        std::vector<std::string> names, AIComponent *aiComponent)
+{
+    assert(names.size() == 3);
+    std::vector<Character *> enemies;
+    for(auto i:names){
+        enemies.push_back(createEnemy(i, aiComponent));
+    }
+
+    enemies[0]->setMoves({{enemies[0]}});
+    enemies[1]->setMoves({{enemies[1]}});
+    enemies[2]->setMoves({{enemies[2]}});
+    return enemies;
+}
+
+
+Character *CharacterGenerator::createEnemy(std::string name, AIComponent *aiComponent)
+{
+    Character *character = nullptr;
+    if(name == "Gato"){
+        character = new Enemy(aiComponent);
+        character->setName("Gato");
+        character->setSpeed(15);
+        character->setMaxHealth(300);
+        character->setPower(13);
+        character->setRegen(10);
+        character->setSprites({
+                                ":/images/Gato (Front).gif"});
+        character->setPosition({600, 50});
+    }
+    else if(name == "Cyrus"){
+        character = new Enemy(aiComponent);
+        character->setName("Cyrus");
+        character->setSpeed(15);
+        character->setMaxHealth(300);
+        character->setPower(13);
+        character->setRegen(10);
+        character->setSprites({
+                                ":/images/Cyrus (Front).gif"});
+        character->setPosition({600, 50});
+
+    }
+    else if(name == "Heckran"){
+        character = new Enemy(aiComponent);
+        character->setName("Heckran");
+        character->setSpeed(15);
+        character->setMaxHealth(300);
+        character->setPower(13);
+        character->setRegen(10);
+        character->setSprites({
+                                ":/images/Heckran (Front).gif"});
+        character->setPosition({600, 50});
+
+    }
+    return character;
+}
+

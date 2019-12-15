@@ -8,8 +8,8 @@ int main(int argc, char *argv[])
 
     Game *game = Game::create_instance();
     game->init();
-    game->loop();
-//    game->show();
+//    game->loop();
+    game->show();
 
     for(int i=0;i<100;i++){
 //        QTest::qWait(100);

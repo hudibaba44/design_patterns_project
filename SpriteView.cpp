@@ -33,7 +33,8 @@ void SpriteView::setAttackSignal()
     QIcon ButtonIcon(pixmap);
     attackButton->setIcon(ButtonIcon);
     attackButton->setIconSize(pixmap.rect().size());
-    attackButton->move(600,50);
+    auto position = character->getPosition();
+    attackButton->move(position.first, position.second);
     sprite->setPixmap(QPixmap(character->getSprite().c_str()));
     connect(attackButton, SIGNAL(clicked()),
                      this, SLOT(handleClick()));

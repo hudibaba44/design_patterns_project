@@ -12,7 +12,8 @@
 #include <queue>
 #include <TimeView.h>
 #include "SpriteView.h"
-
+#include "PlayerOverworld.h"
+#include "EnemyOverworld.h"
 class Game: public QGraphicsView
 {
     Q_OBJECT
@@ -20,22 +21,30 @@ public:
     ~Game();
     static Game* create_instance();
     void init();
+    void initAll();
     std::vector<Character *> getPlayers() const;
     void enemyAttack(std::vector<Character *> enemy, Character *target);
-    void loop();
+    void battleStart(EnemyOverworld *enemy);
+    int loop();
 public slots:
     void setMoveSelected(std::vector<Character *>);
     void playerAttack(Character *);
+    void setDifficulty();
 private:
     Game(QWidget * parent=nullptr);
     Game(const Game&) = delete;
     void makeAtack();
     static Game *instance;
-
-    QGraphicsScene *scene;
+    void generateWorldScene();
+    QGraphicsScene *battleScene;
+    QGraphicsScene *worldScene;
+    QGraphicsScene *winScene;
+    QGraphicsScene *loseScene;
+    QGraphicsScene *difficultyScene;
     HealthView *healthView;
     TimeComponent *timeComponent;
     std::vector<Character *> players;
+    std::vector<Character *> enemies;
     std::vector<Character *> moveSelected;
 
     struct AttackInfo{
@@ -47,7 +56,12 @@ private:
     std::vector<TimeView *> timeViews;
     std::vector<HealthView *> healthViews;
     std::vector<SpriteView *> spriteViews;
-    Character *enemy1;
+    std::vector<SpriteView *> buttonSpriteViews;
+    std::vector<EnemyOverworld *> enemyOverworld;
+    PlayerOverworld * playerOverworld;
+    QGraphicsProxyWidget *enemyProxy;
+    Character *activeEnemy;
+    std::string difficulty;
 };
 
 #endif // GAME_H

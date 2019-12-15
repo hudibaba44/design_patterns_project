@@ -21,7 +21,9 @@ SOURCES += \
     AIStrategyFactory.cpp \
     AIStrategyImpl.cpp \
     Character.cpp \
+    CharacterGenerator.cpp \
     Enemy.cpp \
+    EnemyOverworld.cpp \
     Game.cpp \
     HealthComponent.cpp \
     HealthView.cpp \
@@ -29,7 +31,7 @@ SOURCES += \
     LayoutGenerator.cpp \
     MoveView.cpp \
     Player.cpp \
-    PlayerGenerator.cpp \
+    PlayerOverworld.cpp \
     ProgressBarView.cpp \
     SpriteView.cpp \
     TimeComponent.cpp \
@@ -43,7 +45,9 @@ HEADERS += \
     AIStrategyFactory.h \
     AIStrategyImpl.h \
     Character.h \
+    CharacterGenerator.h \
     Enemy.h \
+    EnemyOverworld.h \
     Game.h \
     HealthComponent.h \
     HealthView.h \
@@ -51,7 +55,7 @@ HEADERS += \
     LayoutGenerator.h \
     MoveView.h \
     Player.h \
-    PlayerGenerator.h \
+    PlayerOverworld.h \
     ProgressBarView.h \
     SpriteView.h \
     TimeComponent.h \
